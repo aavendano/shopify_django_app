@@ -1,11 +1,15 @@
-#!/usr/bin/env python
+#!/home/alejandro/Documents/backend/.venv/bin/python
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
 
+from backend.env import load_project_env
+
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'shopify_django_app.settings')
+    load_project_env()
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                          'backend.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

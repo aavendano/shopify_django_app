@@ -1,8 +1,12 @@
-asgiref==3.2.10
-Django==3.0.8
-pyactiveresource==2.2.1
-pytz==2020.1
-PyYAML==5.3.1
-ShopifyAPI==8.0.1
-six==1.15.0
-sqlparse==0.3.1
+asgiref
+Django
+pyactiveresource
+pytz
+PyYAML
+ShopifyAPI
+six
+sqlparse
+tomli-w
+django-extensions
+jupyter
+notebook < 7.0
