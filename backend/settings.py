@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
 
-
+    'accounts.apps.AccountsConfig',
     'session.apps.SessionConfig',
 ]
 
