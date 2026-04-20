@@ -97,3 +97,4 @@ Untitled*.ipynb
 Caddyfile
 .vscode/
 staticfiles/
+.cursor/settings.json
