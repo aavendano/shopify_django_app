@@ -11,3 +11,5 @@ tomli-w
 django-extensions
 jupyter
 notebook < 7.0
+shopifyapp
+

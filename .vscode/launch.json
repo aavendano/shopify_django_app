@@ -12,7 +12,7 @@
             "envFile": "${workspaceFolder}/.env",
             "args": [
                 "runserver",
-                "localhost:8081"
+                "localhost:8080"
             ],
             "django": true,
             "autoStartBrowser": false,

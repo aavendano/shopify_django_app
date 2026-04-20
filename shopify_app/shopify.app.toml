@@ -2,7 +2,7 @@
 
 client_id = "95f0ce6897d9c9137ef4d099b8137050"
 name = "shop_django_app"
-application_url = "https://shopify-django-app.avendano.site"
+application_url = "https://shopify-django-app.avendano.site/app/"
 embedded = true
 
 [build]

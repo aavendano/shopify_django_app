@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'session.apps.SessionConfig',
     'core.apps.CoreConfig',
+    'webhooks.apps.WebhooksConfig',
 ]
 
 MIDDLEWARE = [
@@ -49,8 +50,10 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+X_FRAME_OPTIONS = 'ALLOWALL' # Allow embedding the app in Shopify
 
 ROOT_URLCONF = 'config.urls'
 
@@ -149,6 +152,14 @@ SHOPIFY_API_SECRET = os.environ.get('SHOPIFY_API_SECRET')
 SHOPIFY_APP_DOMAIN = os.environ.get('SHOPIFY_APP_DOMAIN')
 SHOPIFY_APP_URL = os.environ.get('SHOPIFY_APP_URL')
 SHOPIFY_SCOPES = os.environ.get('SHOPIFY_SCOPES')
+SHOPIFY_ADMIN_API_VERSION = os.environ.get('SHOPIFY_ADMIN_API_VERSION', '2025-04')
 
-# Allow embedding the app in Shopify
-X_FRAME_OPTIONS = 'ALLOWALL'
+# Hostnames allowed for app_home_parent_redirect targets (comma-separated). Always includes
+# admin.shopify.com plus SHOPIFY_APP_URL / SHOPIFY_APP_DOMAIN hosts via embedded_redirects.parent_redirect_allowed_hosts.
+_parent_redirect_hosts = os.environ.get('SHOPIFY_PARENT_REDIRECT_ALLOWED_HOSTS', '')
+SHOPIFY_PARENT_REDIRECT_ALLOWED_HOSTS = [
+    h.strip().lower()
+    for h in _parent_redirect_hosts.split(',')
+    if h.strip()
+]
+
