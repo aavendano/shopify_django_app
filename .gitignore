@@ -89,7 +89,9 @@ local_settings.py
 db.sqlite3
 db.session
 
-.venv/*
+.venv/
 .ipynb_checkpoints/
 Untitled*.ipynb
 
+Caddyfile
+.vscode/
