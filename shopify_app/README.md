@@ -128,6 +128,37 @@ When you're ready to set up your app in production, you can follow [our deployme
 
 When you reach the step for [setting up environment variables](https://shopify.dev/docs/apps/deployment/web#set-env-vars), you also need to set the variable `NODE_ENV=production`.
 
+### Running `npm start` without the Shopify CLI
+
+`shopify app dev` injects variables for you. **`react-router-serve` does not read `.env` by itself.** This monorepo uses a **single `.env` at the repository root** (next to `manage.py`). Before Shopify initializes, `app/load-root-env.server.ts` (imported from `app/shopify.server.ts`) finds that file by walking up from the compiled server until it sees both `manage.py` and `.env`, then loads it with `dotenv`. Django loads the same path via `config/load_env.py`. For production you can still inject variables with systemd / Docker instead of a file on disk.
+
+Copy [`.env.example`](../.env.example) in the repo root to `.env` there and fill in real values, or export the same keys in the shell / `EnvironmentFile` before `npm start`.
+
+| Variable | Purpose |
+|----------|---------|
+| `SHOPIFY_APP_URL` | Public HTTPS URL of the app (must match Shopify `application_url` / Partner app URL). |
+| `SHOPIFY_API_KEY` | App API key (client id). |
+| `SHOPIFY_API_SECRET` | App API secret. |
+| `SCOPES` | Comma-separated scopes, same as `shopify.app.toml`. |
+| `PORT` | Listen port for Node (e.g. `8080` if your reverse proxy targets that port for `/app*`). |
+
+Example **systemd** drop-in pattern:
+
+```ini
+[Service]
+WorkingDirectory=/path/to/shopify_django_app/shopify_app
+Environment=NODE_ENV=production
+Environment=PORT=8080
+Environment=SHOPIFY_APP_URL=https://your-host.example
+Environment=SHOPIFY_API_KEY=...
+Environment=SHOPIFY_API_SECRET=...
+Environment=SCOPES=write_products
+# Or: EnvironmentFile=/path/to/shopify_django_app/.env
+ExecStart=/usr/bin/npm start
+```
+
+Inspect variables when using Shopify-managed tooling: `npm run env` (runs `shopify app env`).
+
 ## Gotchas / Troubleshooting
 
 ### Database tables don't exist

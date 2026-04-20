@@ -7,6 +7,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
+import config.load_env  # noqa: F401
 import os
 
 from django.core.asgi import get_asgi_application

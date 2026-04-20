@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +22,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if os.environ.get('SHOPIFY_APP_DOMAIN'):
+    ALLOWED_HOSTS.append(os.environ.get('SHOPIFY_APP_DOMAIN'))
 
 
 # Application definition
@@ -34,6 +39,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'session.apps.SessionConfig',
+    'core.apps.CoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.shopify_context',
             ],
         },
     },
@@ -135,3 +142,13 @@ NOTEBOOK_ARGUMENTS = [
     '--port', '8888',
 ]
 IPYTHON_KERNEL_DISPLAY_NAME = 'Django Kernel'
+
+
+SHOPIFY_API_KEY = os.environ.get('SHOPIFY_API_KEY')
+SHOPIFY_API_SECRET = os.environ.get('SHOPIFY_API_SECRET')
+SHOPIFY_APP_DOMAIN = os.environ.get('SHOPIFY_APP_DOMAIN')
+SHOPIFY_APP_URL = os.environ.get('SHOPIFY_APP_URL')
+SHOPIFY_SCOPES = os.environ.get('SHOPIFY_SCOPES')
+
+# Allow embedding the app in Shopify
+X_FRAME_OPTIONS = 'ALLOWALL'

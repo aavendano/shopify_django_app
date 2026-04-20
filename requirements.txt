@@ -1,5 +1,6 @@
 asgiref
 Django
+python-dotenv
 pyactiveresource
 pytz
 PyYAML
