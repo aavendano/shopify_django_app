@@ -83,7 +83,7 @@ class HomeView(AppHomeVerifiedMixin, TemplateView):
         )
         if token_result is not None:
             return shopify_result_to_django_response(token_result)
-        return super().dispatch(request, *args, **kwargs)
+        return super(AppHomeVerifiedMixin, self).dispatch(request, *args, **kwargs)
 
     def render_to_response(self, context, **response_kwargs):
         halt = getattr(self, "_admin_graphql_halt", None)

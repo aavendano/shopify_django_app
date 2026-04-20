@@ -25,7 +25,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 if os.environ.get('SHOPIFY_APP_DOMAIN'):
     ALLOWED_HOSTS.append(os.environ.get('SHOPIFY_APP_DOMAIN'))
-
+    CSRF_TRUSTED_ORIGINS = [os.environ.get('SHOPIFY_APP_URL')] # Allow CSRF protection for the app
 
 # Application definition
 
