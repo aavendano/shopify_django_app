@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from core.models import ShopConfig
-from core.shopify_client import get_shopify_app
+from core.utils import get_shopify_app
 from core.token_service import (
     ensure_offline_token_lifecycle,
     refresh_stored_token_if_possible,

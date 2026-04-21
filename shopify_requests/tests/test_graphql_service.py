@@ -24,7 +24,7 @@ class ExecuteAdminGraphqlTests(TestCase):
     def test_uses_persisted_token_and_returns_data(self, mock_raw):
         ShopConfig.objects.create(
             shop="s-test",
-            isonline=False,
+            is_online=False,
             access_token="tok",
         )
         mock_raw.return_value = _ok_gql_response()
@@ -59,7 +59,7 @@ class ExecuteAdminGraphqlTests(TestCase):
     def test_unauthorized_clears_local_tokens(self, mock_raw):
         ShopConfig.objects.create(
             shop="s-test",
-            isonline=False,
+            is_online=False,
             access_token="bad",
             refresh_token="r",
         )
@@ -86,7 +86,7 @@ class ExecuteAdminGraphqlTests(TestCase):
     def test_propagates_invalid_token_response_to_client(self, mock_raw):
         ShopConfig.objects.create(
             shop="s-test",
-            isonline=False,
+            is_online=False,
             access_token="tok",
         )
         mock_raw.return_value = _ok_gql_response()

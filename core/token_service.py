@@ -3,7 +3,7 @@ from dataclasses import asdict, is_dataclass
 from django.utils.dateparse import parse_datetime
 
 from .models import ShopConfig
-from .shopify_client import _get_attr, get_shopify_app, log_shopify_result
+from .utils import _get_attr, get_shopify_app, log_shopify_result
 
 
 TOKEN_ERROR_CODES = {"invalid_subject_token", "unauthorized", "invalid_client"}
@@ -62,9 +62,9 @@ def persist_access_token(access_token, fallback_shop=None):
     if not shop:
         return None
 
-    isonline = payload.get("access_mode") == "online"
+    is_online = payload.get("access_mode") == "online"
     defaults = {
-        "isonline": isonline,
+        "is_online": is_online,
         "scope": payload.get("scope") or None,
         "expires": _parse_optional_datetime(payload.get("expires")),
         "access_token": payload.get("token") or None,
@@ -81,7 +81,7 @@ def _refresh_token_if_possible(shopify_app, record):
     if not record.refresh_token:
         return None
 
-    access_mode = "online" if record.isonline else "offline"
+    access_mode = "online" if record.is_online else "offline"
     refresh_result = shopify_app.refresh_token_exchanged_access_token(
         {
             "shop": record.shop,

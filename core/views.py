@@ -12,7 +12,7 @@ from .embedded_redirects import (
 )
 from .forms import ShopConfigForm
 from .mixins import AppHomeVerifiedMixin
-from .shopify_client import (
+from .utils import (
     get_shopify_app,
     log_shopify_result,
     request_to_shopify_req,

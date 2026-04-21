@@ -40,14 +40,14 @@ class ShopConfigFormTests(TestCase):
 class PublicEntryViewTests(TestCase):
     def test_renders_landing_even_when_shop_exists(self):
         response = self.client.get(
-            f"{reverse('core:public-entry')}?shop=test-shop.myshopify.com&hmac=abc123"
+            f"{reverse('core:install')}?shop=test-shop.myshopify.com&hmac=abc123"
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'action="/auth/login"')
 
     def test_renders_landing_with_auth_login_form_without_shop(self):
-        response = self.client.get(reverse("core:public-entry"))
+        response = self.client.get(reverse("core:install"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'action="/auth/login"')
@@ -112,7 +112,7 @@ class HomeViewAuthTests(TestCase):
 
         mocked_get_shopify_app.return_value.verify_app_home_req.assert_called_once()
         _, kwargs = mocked_get_shopify_app.return_value.verify_app_home_req.call_args
-        self.assertEqual(kwargs["app_home_patch_id_token_path"], "/auth/patch-id-token")
+        self.assertEqual(kwargs["app_home_patch_id_token_path"], "/core/auth/patch-id-token")
 
     @patch("core.mixins.get_shopify_app")
     def test_document_request_valid_renders_page_and_copies_headers(self, mocked_get_shopify_app):
@@ -140,7 +140,7 @@ class HomeViewAuthTests(TestCase):
                 status=302,
                 body="",
                 headers={
-                    "Location": "/auth/patch-id-token?shop=test-shop.myshopify.com"
+                    "Location": "/core/auth/patch-id-token?shop=test-shop.myshopify.com"
                 },
             ),
         )
@@ -149,7 +149,7 @@ class HomeViewAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(
-            response["Location"], "/auth/patch-id-token?shop=test-shop.myshopify.com"
+            response["Location"], "/core/auth/patch-id-token?shop=test-shop.myshopify.com"
         )
 
     @patch("core.mixins.get_shopify_app")
@@ -194,7 +194,7 @@ class HomeViewAuthTests(TestCase):
     ):
         ShopConfig.objects.create(
             shop="test-shop",
-            isonline=False,
+            is_online=False,
             access_token="tok",
         )
         mocked_get_shopify_app.return_value.verify_app_home_req.return_value = SimpleNamespace(
@@ -238,7 +238,7 @@ class AuthPatchIdTokenViewTests(TestCase):
             )
         )
 
-        response = self.client.get("/auth/patch-id-token?shop=test-shop.myshopify.com")
+        response = self.client.get("/core/auth/patch-id-token?shop=test-shop.myshopify.com")
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["Location"], "/app/?shopify-reload=%2Fapp%2F")
@@ -289,7 +289,7 @@ class TokenLifecycleTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         record = ShopConfig.objects.get(shop="test-shop")
-        self.assertFalse(record.isonline)
+        self.assertFalse(record.is_online)
         self.assertEqual(record.access_token, "new-access-token")
         self.assertEqual(record.scope, "write_products")
         self.assertEqual(record.refresh_token, "refresh-token")
@@ -308,7 +308,7 @@ class TokenLifecycleTests(TestCase):
         )
         ShopConfig.objects.create(
             shop="test-shop",
-            isonline=False,
+            is_online=False,
             access_token="stale-token",
             refresh_token="refresh-token",
         )
@@ -354,7 +354,7 @@ class TokenLifecycleTests(TestCase):
     ):
         ShopConfig.objects.create(
             shop="test-shop",
-            isonline=False,
+            is_online=False,
             access_token="stale-token",
             refresh_token="refresh-token",
         )
@@ -417,7 +417,7 @@ class EmbeddedRedirectViewTests(TestCase):
             response=SimpleNamespace(
                 status=302,
                 body="",
-                headers={"Location": "/auth/patch-id-token"},
+                headers={"Location": "/core/auth/patch-id-token"},
             ),
             log=SimpleNamespace(code="redirect_to_patch_id_token_page", detail=""),
         )
@@ -427,7 +427,7 @@ class EmbeddedRedirectViewTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["Location"], "/auth/patch-id-token")
+        self.assertEqual(response["Location"], "/core/auth/patch-id-token")
 
     @patch("core.mixins.get_shopify_app")
     def test_in_app_calls_sdk_with_next_and_shop(self, mock_gs):

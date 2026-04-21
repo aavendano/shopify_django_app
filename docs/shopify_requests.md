@@ -16,7 +16,7 @@ Este documento describe cómo consumir el paquete [`shopify_requests`](../shopif
 | Variable | Ubicación | Descripción |
 |----------|-----------|-------------|
 | `SHOPIFY_ADMIN_API_VERSION` | [`config/settings.py`](../config/settings.py) | Versión de la API Admin usada en GraphQL. Por defecto `2025-04`. Se puede sobreescribir con la variable de entorno homónima. |
-| `SHOPIFY_API_KEY` / `SHOPIFY_API_SECRET` | `settings` / entorno | Credenciales de la app; las usa `get_shopify_app()` en [`core/shopify_client.py`](../core/shopify_client.py). |
+| `SHOPIFY_API_KEY` / `SHOPIFY_API_SECRET` | `settings` / entorno | Credenciales de la app; las usa `get_shopify_app()` en [`core/utils.py`](../core/utils.py). |
 
 ## API pública
 
@@ -79,7 +79,7 @@ Dataclass con el resultado normalizado:
 | `log_detail` | Texto de detalle del log. |
 | `reauthorization_required` | `True` cuando el error indica que hay que reautorizar (p. ej. códigos alineados con `TOKEN_ERROR_CODES` en `core.token_service` o `unauthorized`). |
 | `retryable` | Reservado para errores transitorios (p. ej. `throttled`); en la implementación actual es acotado. |
-| `raw` | Resultado crudo del SDK cuando la llamada provino del cliente GraphQL o del lifecycle; puede ser `None` si solo falló la resolución de token sin objeto SDK. Sirve para traducir la respuesta HTTP con `shopify_result_to_django_response` en [`core/shopify_client.py`](../core/shopify_client.py). |
+| `raw` | Resultado crudo del SDK cuando la llamada provino del cliente GraphQL o del lifecycle; puede ser `None` si solo falló la resolución de token sin objeto SDK. Sirve para traducir la respuesta HTTP con `shopify_result_to_django_response` en [`core/utils.py`](../core/utils.py). |
 
 ## Cómo se resuelve el access token
 
@@ -120,7 +120,7 @@ if gql.ok and gql.data:
 Si `not gql.ok` y `gql.raw` es el resultado del SDK, se puede devolver la respuesta HTTP esperada por Shopify:
 
 ```python
-from core.shopify_client import shopify_result_to_django_response
+from core.utils import shopify_result_to_django_response
 
 if not gql.ok and gql.raw is not None:
     return shopify_result_to_django_response(gql.raw)

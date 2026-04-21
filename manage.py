@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Django's command-line utility for administrative tasks."""
-import config.load_env  # noqa: F401
+
 import os
 import sys
 

@@ -1,4 +1,4 @@
-from core.shopify_client import log_shopify_result
+from core.utils import log_shopify_result
 
 
 def raw_admin_graphql(

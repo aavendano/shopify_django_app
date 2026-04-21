@@ -26,7 +26,7 @@ class WebhookUninstalledTests(TestCase):
 
     @patch("webhooks.views.get_shopify_app")
     def test_uninstalled_deletes_shop_config_by_short_shop(self, mock_get_app):
-        ShopConfig.objects.create(shop="demo", isonline=False, access_token="tok")
+        ShopConfig.objects.create(shop="demo", is_online=False, access_token="tok")
         mock_get_app.return_value.verify_webhook_req.return_value = SimpleNamespace(
             ok=True,
             shop="demo.myshopify.com",
@@ -46,7 +46,7 @@ class WebhookUninstalledTests(TestCase):
     @patch("webhooks.views.get_shopify_app")
     def test_uninstalled_deletes_shop_config_by_full_domain_row(self, mock_get_app):
         ShopConfig.objects.create(
-            shop="demo.myshopify.com", isonline=False, access_token="tok"
+            shop="demo.myshopify.com", is_online=False, access_token="tok"
         )
         mock_get_app.return_value.verify_webhook_req.return_value = SimpleNamespace(
             ok=True,

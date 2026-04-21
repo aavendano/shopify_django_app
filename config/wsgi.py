@@ -7,7 +7,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 """
 
-import config.load_env  # noqa: F401
+
 import os
 
 from django.core.wsgi import get_wsgi_application

@@ -1,4 +1,4 @@
-from .shopify_client import (
+from .utils import (
     get_shopify_app,
     log_shopify_result,
     request_to_shopify_req,
@@ -12,10 +12,10 @@ class AppHomeVerifiedMixin:
     Subclasses implement dispatch_after_verified() for post-verification logic.
     """
 
-    app_home_patch_id_token_path = "/auth/patch-id-token"
 
     def get_app_home_patch_id_token_path(self):
-        return self.app_home_patch_id_token_path
+        from django.urls import reverse
+        return reverse("core:patch-id-token")
 
     def dispatch(self, request, *args, **kwargs):
         shopify_app = get_shopify_app()

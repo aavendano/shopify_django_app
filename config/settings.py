@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
+load_dotenv(".env", override=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'accounts.apps.AccountsConfig',
-    'session.apps.SessionConfig',
     'core.apps.CoreConfig',
     'webhooks.apps.WebhooksConfig',
 ]
@@ -85,13 +83,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    "session": {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.session'),
-    }
+
 }
 
-DATABASE_ROUTERS = ['config.db_routers.SessionRouter']
+
 
 
 # Password validation
@@ -130,9 +125,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-
-AUTH_USER_MODEL = 'accounts.User'
 
 
 # Default primary key field type
